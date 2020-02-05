@@ -11,6 +11,8 @@ export class HomeComponent {
   // paises: any[] = [];
     nuevasCanciones: any[] = [];
     loading: boolean;
+    error: boolean;
+    mensajeError: string;
   constructor( private spotify: SpotifyService /*private http: HttpClient*/ ) {
     /*this.http.get('https://restcountries.eu/rest/v2/lang/es')
     .subscribe( (resp: any) => {
@@ -18,12 +20,18 @@ export class HomeComponent {
       console.log(resp);
     } );*/
     this.loading = true;
+    this.error = false;
     
     this.spotify.getNewReleases()
     .subscribe( (data: any)  => {
       console.log(data);
       this.nuevasCanciones = data;
       this.loading=false;
+    }, (errorServicio) => {
+      this.loading=false;
+      this.error = true;
+      console.log(errorServicio);
+      this.mensajeError = errorServicio.error.error.message;
     });
 
   }
